@@ -1,0 +1,25 @@
+signal = data(31,:,1,1)      % sample 8 hz, Oz, 1st block
+
+N = length(signal)
+
+Fs = 500; % 採樣率
+
+% 進行FFT
+Y = fft(signal);
+
+% 計算雙側頻譜
+P2 = abs(Y/N);
+
+% 計算單側頻譜
+P1 = P2(1:N/2+1);
+P1(2:end-1) = 2*P1(2:end-1);
+
+% 定義頻率範圍
+f = Fs*(0:(N/2))/N;
+
+% 繪製頻譜
+figure;
+plot(f,P1) 
+title('Signal Frequency Spectrum')
+xlabel('Frequency (f)')
+ylabel('|P1(f)|')

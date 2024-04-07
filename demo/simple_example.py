@@ -22,13 +22,22 @@ dataset = BenchmarkDataset(path = '2016_Tsinghua_SSVEP_database')
 dataset.regist_preprocess(preprocess)
 dataset.regist_filterbank(filterbank)
 
+# print(dataset)
+# print(dataset.stim_info['freqs'])
+
 # Prepare recognition model
 weights_filterbank = suggested_weights_filterbank()
 recog_model = ETRCAwithR(weights_filterbank = weights_filterbank)
 
 # Set simulation parameters
 ch_used = suggested_ch()
+
+print(ch_used)
+
 all_trials = [i for i in range(dataset.trial_num)]
+
+# print(all_trials)
+
 harmonic_num = 5
 tw = 1
 sub_idx = 1

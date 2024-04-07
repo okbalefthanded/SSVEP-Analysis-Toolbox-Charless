@@ -11,13 +11,10 @@ import os
 
 import numpy as np
 
-data_file_list = ['res/benchmarkdataset_res.mat',
-                  'res/betadataset_res.mat']
-save_folder = ['benchmarkdataset_confusionmatrix',
-               'beta_confusionmatrix']
+data_file_list = ['2016_Tsinghua_SSVEP_database/S1.mat',]
+save_folder = ['benchmarkdataset_confusionmatrix']
 dataset_container = [
                         BenchmarkDataset(path = '2016_Tsinghua_SSVEP_database'),
-                        BETADataset(path = '2020_BETA_SSVEP_database_update')
                     ]
 target_time = 0.5
 
@@ -26,6 +23,7 @@ for dataset_idx, data_file in enumerate(data_file_list):
         print("'{:s}' does not exist.".format(data_file))
         continue
     data = loaddata(data_file, 'mat')
+    print(data)
     confusion_matrix = data["confusion_matrix"]
     method_ID = data["method_ID"]
     tw_seq = data["tw_seq"]

@@ -7,3 +7,6 @@ from .eldbetadataset import ELDBETADataset
 from .nakanishidataset import NakanishiDataset
 from .openbmidataset import openBMIDataset
 from .wearabledataset import WearableDataset_dry, WearableDataset_wet
+
+from .charlessdataset import CharlessDataset
+from .basedatasetNodownload import BaseDatasetNoDownload
