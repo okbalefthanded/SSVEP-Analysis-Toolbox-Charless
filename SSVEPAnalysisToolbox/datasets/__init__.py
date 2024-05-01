@@ -10,3 +10,4 @@ from .wearabledataset import WearableDataset_dry, WearableDataset_wet
 
 from .charlessdataset import CharlessDataset
 from .basedatasetNodownload import BaseDatasetNoDownload
+from .benchmarkdataset_modified import BenchmarkDataset_modified

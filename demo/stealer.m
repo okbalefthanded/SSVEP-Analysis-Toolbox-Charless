@@ -25,7 +25,7 @@
 % !Extract epoch, get a data w/ 10001 frames
 % EEG = pop_rmdat( EEG, {'10, Expr 20s'},[0 20] ,0);
 
-data = ones(32, 10000, 8, 5)
+data = ones(31, 10000, 8, 5)
 
 for block = 1:5
     [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
@@ -35,6 +35,9 @@ for block = 1:5
     EEG = pop_eegfiltnew(EEG, 'locutoff',1,'hicutoff',200,'plotfreqz',1);
     % Notch ilter 40~60
     EEG = pop_eegfiltnew(EEG, 'locutoff',40,'hicutoff',60,'revfilt',1,'plotfreqz',1);
+
+    % Rereference to 'CPz'
+    EEG = pop_reref( EEG, 22);
 
     % % Select right channel
     % EEG = pop_select( EEG, 'channel',{'TP7','CP3','CPz','CP4','TP8','P7','P3','Pz','P4','P8','O1','Oz','O2'});
@@ -52,7 +55,7 @@ for block = 1:5
         tmp_eeg = pop_rmdat( EEG, {str_tmp},[0 20], 0);
 
         % 处理epoch数据，并保存结果
-        for chan = 1:32
+        for chan = 1:31
             data(chan, :, freq_idx, block) = tmp_eeg.data(chan, 1:10000);
         end
     end

@@ -15,7 +15,7 @@ from SSVEPAnalysisToolbox.evaluator import cal_acc,cal_itr
 
 import time
 
-num_subbands = 1
+num_subbands = 5
 
 # Prepare dataset
 dataset = CharlessDataset(path = 'Charless_database')
@@ -30,7 +30,7 @@ weights_filterbank = suggested_weights_filterbank()
 recog_model = SCCA_qr(weights_filterbank = weights_filterbank)
 
 # Set simulation parameters
-ch_used = [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+ch_used = [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
 
 all_trials = [i for i in range(dataset.trial_num)]
 
@@ -41,7 +41,8 @@ test_block_idx = 0
 test_block_list, train_block_list = dataset.leave_one_block_out(block_idx = test_block_idx)
 
 # Get training data and train the recognition model
-ref_sig = dataset.get_ref_sig(tw, harmonic_num)
+ref_sig = dataset.get_ref_sig(tw, harmonic_num,ignore_stim_phase=True)
+
 freqs = dataset.stim_info['freqs']
 X_train, Y_train = dataset.get_data(sub_idx = sub_idx,
                                     blocks = train_block_list,
@@ -62,7 +63,8 @@ X_test, Y_test = dataset.get_data(sub_idx = sub_idx,
 tic = time.time()
 pred_label, _ = recog_model.predict(X_test)
 
-print(f"Test_y = {Y_test}, Pred_x = {pred_label}")
+print(f"Test_y = {Y_test}")
+print(f"Pred_y = {pred_label}")
 
 toc_test = time.time()-tic
 toc_test_onetrial = toc_test/len(Y_test)

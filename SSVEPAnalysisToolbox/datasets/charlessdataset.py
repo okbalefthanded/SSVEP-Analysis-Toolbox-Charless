@@ -17,11 +17,11 @@ class CharlessDataset(BaseDatasetNoDownload):
     """
         This is handsome charless's dataset.
 
-        # Targets = 8  (from 8 hz to 15 hz)
-        # Channels = 32 ('Fp1', 'Fp2', 'AF3', 'AF4', 'F7', 'F3', 'Fz', 'F4', 'F8', 'FT7',
+        # Targets(Trails) = 8  (from 8 hz to 15 hz)
+        # Channels = 31 ('Fp1', 'Fp2', 'AF3', 'AF4', 'F7', 'F3', 'Fz', 'F4', 'F8', 'FT7',
                          'FC3', 'FCz', 'FC4', 'FT8', 'T7', 'C3', 'Cz', 'C4', 'T8', 'TP7',
-                         'CP3', 'CPz', 'CP4', 'TP8', 'P7', 'P3', 'Pz', 'P4', 'P8', 'O1',
-                         'Oz', 'O2')
+                         'CP3', 'CP4', 'TP8', 'P7', 'P3', 'Pz', 'P4', 'P8', 'O1',
+                         'Oz', 'O2')                                                    # * Notice: CPz was used for Re-reference
         # Sampling rate = 500hz
         # Sampling points = 10000 per epoch
         # Block = 5
@@ -30,10 +30,11 @@ class CharlessDataset(BaseDatasetNoDownload):
         Currently only 1 subject, the handsome Charless :(
     """
  
+    # * Notice: CPz was used for Rereference
     _CHANNELS = [
         'Fp1', 'Fp2', 'AF3', 'AF4', 'F7', 'F3', 'Fz', 'F4', 'F8', 'FT7',
         'FC3', 'FCz', 'FC4', 'FT8', 'T7', 'C3', 'Cz', 'C4', 'T8', 'TP7',
-        'CP3', 'CPz', 'CP4', 'TP8', 'P7', 'P3', 'Pz', 'P4', 'P8', 'O1',
+        'CP3', 'CP4', 'TP8', 'P7', 'P3', 'Pz', 'P4', 'P8', 'O1',
         'Oz', 'O2'
     ]
 
@@ -45,7 +46,7 @@ class CharlessDataset(BaseDatasetNoDownload):
         0, 0, 0, 0, 0, 0, 0, 0
     ]
     
-    _SUBJECTS = [SubInfo(ID = 'S{:d}'.format(1))]
+    _SUBJECTS = [SubInfo(ID = 'S1-new')]
     
     def __init__(self, 
                  path: Optional[str] = None,

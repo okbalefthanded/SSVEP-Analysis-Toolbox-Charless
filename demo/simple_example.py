@@ -22,17 +22,17 @@ dataset = BenchmarkDataset(path = '2016_Tsinghua_SSVEP_database')
 dataset.regist_preprocess(preprocess)
 dataset.regist_filterbank(filterbank)
 
-# print(dataset)
-# print(dataset.stim_info['freqs'])
+print(dataset)
+print(dataset.stim_info['freqs'])
 
 # Prepare recognition model
 weights_filterbank = suggested_weights_filterbank()
-recog_model = ETRCAwithR(weights_filterbank = weights_filterbank)
+recog_model = SCCA_qr(weights_filterbank = weights_filterbank)
 
 # Set simulation parameters
 ch_used = suggested_ch()
 
-print(ch_used)
+# print(ch_used)
 
 all_trials = [i for i in range(dataset.trial_num)]
 
@@ -66,6 +66,8 @@ tic = time.time()
 pred_label, _ = recog_model.predict(X_test)
 toc_test = time.time()-tic
 toc_test_onetrial = toc_test/len(Y_test)
+
+print(f"Test_y = {Y_test}, Pred_y = {pred_label}")
 
 # Calculate performance
 acc = cal_acc(Y_true = Y_test, Y_pred = pred_label)
