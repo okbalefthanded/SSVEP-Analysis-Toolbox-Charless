@@ -453,10 +453,41 @@ class BaseDatasetNoDownload(metaclass=abc.ABCMeta):
         start_t_idx = t_prestim
         end_t_idx = t_pre + sig_len
         eeg_total = sub_data[block_idx,trial_idx,channels,start_t_idx:end_t_idx]
+
+
+        # channel/datapoint
+        # print(len(eeg_total[0]))
+
+        # #! UPDATE
+        # n = len(eeg_total[0])
+        # freq = np.fft.fftfreq(n, 1/500)
+        # sig_fft = fft(eeg_total[0])
+
+        # # 繪製頻域圖形
+        # plt.figure(figsize=(10, 6))
+        # plt.plot(freq[:n // 2], np.abs(sig_fft)[:n // 2])
+        # plt.title(f'Frequency Domain Signal {trial_idx+8}')
+        # plt.xlabel('Frequency (Hz)')
+        # plt.ylabel('Magnitude')
+
+        # # 限制頻率範圍並設定刻度
+        # plt.xlim([5, 20])
+        # plt.xticks(np.arange(5, 21, 1))  # 5 到 20 Hz, 每 1 Hz 一個刻度
+
+        # plt.tight_layout()
+        # plt.show()
+
         # end_t_idx = eeg_total.shape[-1]
         eeg_total = self.preprocess_fun(self, eeg_total)
+        
+        print(f"Before filterbank_fun{eeg_total.shape}")
+
+        #! ERROR HERE
         eeg_total = self.filterbank_fun(self, eeg_total)
 
+        print(f"After filterbank_fun{eeg_total.shape}")
+
+        # print(eeg_total)
 
         # ! TODO by handsome Charless
         # eeg_trial = []
@@ -495,27 +526,6 @@ class BaseDatasetNoDownload(metaclass=abc.ABCMeta):
         start_t_idx = t_latency
         end_t_idx = t_latency + sig_len
         eeg_trial = eeg_total[:,:,start_t_idx:end_t_idx]
-
-        #! UPDATE
-        n = len(eeg_trial)
-        freq = np.fft.fftfreq(n, 1/500)
-        sig_fft = fft(eeg_trial)
-
-        # 繪製頻域圖形
-        plt.figure(figsize=(10, 6))
-        plt.plot(freq[:n // 2], np.abs(sig_fft)[:n // 2])
-        plt.title('Frequency Domain Signal')
-        plt.xlabel('Frequency (Hz)')
-        plt.ylabel('Magnitude')
-
-        # 限制頻率範圍並設定刻度
-        plt.xlim([5, 20])
-        plt.xticks(np.arange(5, 21, 1))  # 5 到 20 Hz, 每 1 Hz 一個刻度
-
-        plt.tight_layout()
-        plt.show()
-
-
 
         return eeg_trial
     

@@ -45,6 +45,10 @@ def preprocess(dataself,
     
     return preprocess_X
     
+#! WHAT THE FUCK
+#! 有可能power等資料被濾掉，印看看filterbank之後的東西
+#! 有可能好幾層濾掉資料
+#! TRACE THIS
 def filterbank(dataself,
                X: ndarray,
                num_subbands: Optional[int] = 5) -> ndarray:
