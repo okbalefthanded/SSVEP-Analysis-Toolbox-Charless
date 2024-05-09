@@ -4,6 +4,7 @@ import os
 import numpy as np
 import py7zr
 
+
 from typing import Union, Optional, Dict, List, Tuple
 from numpy import ndarray, transpose
 
@@ -34,7 +35,7 @@ class CharlessDataset(BaseDatasetNoDownload):
     _CHANNELS = [
         'Fp1', 'Fp2', 'AF3', 'AF4', 'F7', 'F3', 'Fz', 'F4', 'F8', 'FT7',
         'FC3', 'FCz', 'FC4', 'FT8', 'T7', 'C3', 'Cz', 'C4', 'T8', 'TP7',
-        'CP3', 'CP4', 'TP8', 'P7', 'P3', 'Pz', 'P4', 'P8', 'O1',
+        'CP3', 'CPz', 'CP4', 'TP8', 'P7', 'P3', 'Pz', 'P4', 'P8', 'O1',
         'Oz', 'O2'
     ]
 
@@ -46,7 +47,7 @@ class CharlessDataset(BaseDatasetNoDownload):
         0, 0, 0, 0, 0, 0, 0, 0
     ]
     
-    _SUBJECTS = [SubInfo(ID = 'S1-new')]
+    _SUBJECTS = [SubInfo(ID = 'Sfake')]
     
     def __init__(self, 
                  path: Optional[str] = None,

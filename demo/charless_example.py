@@ -14,8 +14,11 @@ from SSVEPAnalysisToolbox.algorithms import (
 from SSVEPAnalysisToolbox.evaluator import cal_acc,cal_itr
 
 import time
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.fft import fft
 
-num_subbands = 5
+num_subbands = 1
 
 # Prepare dataset
 dataset = CharlessDataset(path = 'Charless_database')
@@ -30,26 +33,85 @@ weights_filterbank = suggested_weights_filterbank()
 recog_model = SCCA_qr(weights_filterbank = weights_filterbank)
 
 # Set simulation parameters
-ch_used = [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+ch_used = [19,20,30]
 
 all_trials = [i for i in range(dataset.trial_num)]
 
 harmonic_num = 5
-tw = 20
+tw = 10
 sub_idx = 0
 test_block_idx = 0
 test_block_list, train_block_list = dataset.leave_one_block_out(block_idx = test_block_idx)
 
-# Get training data and train the recognition model
+# Get training data and train the recognition model #* CHECKED
 ref_sig = dataset.get_ref_sig(tw, harmonic_num,ignore_stim_phase=True)
+
+
+
+# print(len(ref_sig))
+
+# # # 獲取所有信號的時域資料，並畫圖
+# fig, axes = plt.subplots(8, 1, figsize=(10, 20))  # 假設有8個信號
+
+# for i in range(8):
+#     # 對每個信號進行FFT
+#     n = len(ref_sig[i][0])
+#     freq = np.fft.fftfreq(n, 1/500)
+#     sig_fft = fft(ref_sig[i][0])
+
+#     # 頻域信號繪圖
+#     axes[i].plot(freq[:n // 2], np.abs(sig_fft)[:n // 2])
+#     axes[i].set_title(f'Signal {i+1} Frequency Domain')
+#     axes[i].set_xlabel('Frequency (Hz)')
+#     axes[i].set_ylabel('Magnitude')
+
+#     # 限制頻率範圍並設定刻度
+#     axes[i].set_xlim([5, 20])
+#     axes[i].set_xticks(np.arange(5, 21, 1))  # 5 到 20 Hz, 每 1 Hz 一個刻度
+
+# plt.tight_layout()
+# plt.show()
+
+
+
 
 freqs = dataset.stim_info['freqs']
 X_train, Y_train = dataset.get_data(sub_idx = sub_idx,
                                     blocks = train_block_list,
                                     trials = all_trials,
                                     channels = ch_used,
-                                    sig_len = tw,
-                                    shuffle=True)
+                                    sig_len = tw)
+
+# # trail/block/channel/data_pt
+# print(len(X_train[0][0][0]))
+
+
+# # 獲取所有信號的時域資料，並畫圖
+# fig, axes = plt.subplots(8, 1, figsize=(10, 20))  # 假設有8個信號
+
+# for i in range(8):
+#     # 對每個信號進行FFT
+#     n = len(X_train[i][0][0])
+#     freq = np.fft.fftfreq(n, 1/500)
+#     sig_fft = fft(X_train[i][0][0])
+
+#     # 頻域信號繪圖
+#     axes[i].plot(freq[:n // 2], np.abs(sig_fft)[:n // 2])
+#     axes[i].set_title(f'Signal {i+1} Frequency Domain')
+#     axes[i].set_xlabel('Frequency (Hz)')
+#     axes[i].set_ylabel('Magnitude')
+
+#     # 限制頻率範圍並設定刻度
+#     axes[i].set_xlim([5, 20])
+#     axes[i].set_xticks(np.arange(5, 21, 1))  # 5 到 20 Hz, 每 1 Hz 一個刻度
+
+# plt.tight_layout()
+# plt.show()
+
+
+
+
+
 tic = time.time()
 recog_model.fit(X=X_train, Y=Y_train, ref_sig=ref_sig, freqs=freqs) 
 toc_train = time.time()-tic
@@ -63,11 +125,39 @@ X_test, Y_test = dataset.get_data(sub_idx = sub_idx,
 tic = time.time()
 pred_label, _ = recog_model.predict(X_test)
 
+toc_test = time.time()-tic
+toc_test_onetrial = toc_test/len(Y_test)
+
+
 print(f"Test_y = {Y_test}")
 print(f"Pred_y = {pred_label}")
 
-toc_test = time.time()-tic
-toc_test_onetrial = toc_test/len(Y_test)
+
+# trial/block/channel/data_pt
+# print(len(X_test[i][0][0]))
+
+# # 獲取所有信號的時域資料，並畫圖
+# fig, axes = plt.subplots(8, 1, figsize=(10, 20))  # 假設有8個信號
+
+# for i in range(8):
+#     # 對每個信號進行FFT
+#     n = len(X_test[i][0][0])
+#     freq = np.fft.fftfreq(n, 1/500)
+#     sig_fft = fft(X_test[i][0][0])
+
+#     # 頻域信號繪圖
+#     axes[i].plot(freq[:n // 2], np.abs(sig_fft)[:n // 2])
+#     axes[i].set_title(f'Signal {i+8} Frequency Domain')
+#     axes[i].set_xlabel('Frequency (Hz)')
+#     axes[i].set_ylabel('Magnitude')
+
+#     # 限制頻率範圍並設定刻度
+#     axes[i].set_xlim([5, 20])
+#     axes[i].set_xticks(np.arange(5, 21, 1))  # 5 到 20 Hz, 每 1 Hz 一個刻度
+
+# plt.tight_layout()
+# plt.show()
+
 
 # Calculate performance
 acc = cal_acc(Y_true = Y_test, Y_pred = pred_label)

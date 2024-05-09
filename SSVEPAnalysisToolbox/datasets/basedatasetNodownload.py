@@ -11,6 +11,8 @@ import warnings
 import time
 
 import numpy as np
+import matplotlib.pyplot as plt
+from scipy.fft import fft
 
 import random
 random.seed()
@@ -303,6 +305,34 @@ class BaseDatasetNoDownload(metaclass=abc.ABCMeta):
                 X.extend(self.get_data_trial(sub_data, block_idx, trials, channels, sig_len, t_latency))
                 Y.extend(self.get_label_trial(sub_idx_value,block_idx,trials,sig_len))
         
+        # # trail/block/channel/data_pt
+        # print(len(X[0][0][0]))
+
+
+        # # 獲取所有信號的時域資料，並畫圖
+        # fig, axes = plt.subplots(8, 1, figsize=(10, 20))  # 假設有8個信號
+
+        # for i in range(8):
+        #     # 對每個信號進行FFT
+        #     n = len(X[i][0][0])
+        #     freq = np.fft.fftfreq(n, 1/500)
+        #     sig_fft = fft(X[i][0][0])
+
+        #     # 頻域信號繪圖
+        #     axes[i].plot(freq[:n // 2], np.abs(sig_fft)[:n // 2])
+        #     axes[i].set_title(f'Signal {i+1} Frequency Domain')
+        #     axes[i].set_xlabel('Frequency (Hz)')
+        #     axes[i].set_ylabel('Magnitude')
+
+        #     # 限制頻率範圍並設定刻度
+        #     axes[i].set_xlim([5, 20])
+        #     axes[i].set_xticks(np.arange(5, 21, 1))  # 5 到 20 Hz, 每 1 Hz 一個刻度
+
+        # plt.tight_layout()
+        # plt.show()
+
+
+        
         if shuffle:
             trial_seq = [i for i in range(len(X))]
             random.shuffle(trial_seq)
@@ -465,6 +495,26 @@ class BaseDatasetNoDownload(metaclass=abc.ABCMeta):
         start_t_idx = t_latency
         end_t_idx = t_latency + sig_len
         eeg_trial = eeg_total[:,:,start_t_idx:end_t_idx]
+
+        #! UPDATE
+        n = len(eeg_trial)
+        freq = np.fft.fftfreq(n, 1/500)
+        sig_fft = fft(eeg_trial)
+
+        # 繪製頻域圖形
+        plt.figure(figsize=(10, 6))
+        plt.plot(freq[:n // 2], np.abs(sig_fft)[:n // 2])
+        plt.title('Frequency Domain Signal')
+        plt.xlabel('Frequency (Hz)')
+        plt.ylabel('Magnitude')
+
+        # 限制頻率範圍並設定刻度
+        plt.xlim([5, 20])
+        plt.xticks(np.arange(5, 21, 1))  # 5 到 20 Hz, 每 1 Hz 一個刻度
+
+        plt.tight_layout()
+        plt.show()
+
 
 
         return eeg_trial
