@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import ndarray, object
+from numpy import ndarray #, object
 from typing import Union, Optional, Dict, List, Tuple
 import warnings
 

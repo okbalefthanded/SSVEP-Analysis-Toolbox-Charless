@@ -493,8 +493,7 @@ class BaseEvaluator:
         self.performance_container = []
         self.trained_model_container = []
 
-    def save(self,
-             file: str):
+    def save(self, file: str):
         desertation_dir = os.path.dirname(file)
         if not os.path.exists(desertation_dir):
             os.makedirs(desertation_dir)
@@ -519,8 +518,7 @@ class BaseEvaluator:
                         warnings.warn("Remove 'model_container' and 'trained_model_container' still cannot be saved. So only save 'performance_container'.")
                         pickle.dump(self.performance_container, file_, pickle.HIGHEST_PROTOCOL)
 
-    def load(self,
-             file: str):
+    def load(self, file: str):
         if not os.path.isfile(file):
             raise ValueError('{:s} does not exist!!'.format(file))
         with open(file,'rb') as file_:
@@ -571,8 +569,8 @@ class BaseEvaluator:
             #     pbar = create_pbar([len(self.trial_container), len(self.model_container)*2])
             # pbar_update_val = 1
                 
-        self.performance_container, self.trained_model_container = zip(*pbarParallel(n_jobs=n_jobs,timeout=timeout,loop_list_num=[len(self.trial_container)],use_tqdm=self.disp_processbar)
-                                                                                               (delayed(partial(_run_loop, model_container = self.model_container,
+        self.performance_container, self.trained_model_container = zip(*pbarParallel(n_jobs=n_jobs,timeout=timeout,loop_list_num=[len(self.trial_container)], use_tqdm=self.disp_processbar)
+                                                                                    (delayed(partial(_run_loop, model_container = self.model_container,
                                                                                                                            trial_container = self.trial_container,
                                                                                                                            dataset_container = self.dataset_container,
                                                                                                                            ignore_stim_phase = self.ignore_stim_phase,

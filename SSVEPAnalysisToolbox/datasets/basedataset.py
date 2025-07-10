@@ -162,6 +162,7 @@ class BaseDataset(metaclass=abc.ABCMeta):
             raise ValueError("The shapes of EEG signals are not correct")
     def reset_filterbank(self):
         self.regist_filterbank(self.default_filterbank)
+    
     def download_all(self, total_retry_time = 10):
         """
         Download all subjects' data

@@ -90,10 +90,12 @@ confusion_matrix = cal_confusionmatrix_onedataset_individual_diffsiglen(evaluato
 # Calculate training time and testing time
 train_time = np.zeros((len(model_container), len(evaluator.performance_container)))
 test_time = np.zeros((len(model_container), len(evaluator.performance_container)))
+
 for trial_idx, performance_trial in enumerate(evaluator.performance_container):
     for method_idx, method_performance in enumerate(performance_trial):
         train_time[method_idx, trial_idx] = sum(method_performance.train_time)
         test_time[method_idx, trial_idx] = sum(method_performance.test_time_test)
+
 train_time = train_time.T
 test_time = test_time.T
             
